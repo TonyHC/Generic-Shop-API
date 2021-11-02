@@ -20,11 +20,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void save(Customer customer) {
-        customerRepository.save(customer);
-    }
-
-    @Override
     public List<CustomerDTO> getAllCustomers() {
         return customerRepository.findAll()
                 .stream()
@@ -48,6 +43,21 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setId(id);
 
         return savedAndReturnDTO(customer);
+    }
+
+    @Override
+    public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
+        return customerRepository.findById(id).map(customer -> {
+            if (customerDTO.getFirstName() != null) {
+                customer.setFirstName(customerDTO.getFirstName());
+            }
+
+            if (customerDTO.getLastName() != null) {
+                customer.setLastName(customerDTO.getLastName());
+            }
+
+            return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+        }).orElseThrow(RuntimeException::new);
     }
 
     private CustomerDTO savedAndReturnDTO(Customer customer) {
