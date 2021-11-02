@@ -15,15 +15,16 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceImplTest {
     public static final long ID = 1L;
-    public static final String WAYNE = "Wayne";
+    public static final String FIRST_NAME = "Wayne";
     public static final String LAST_NAME = "Hone";
+
     CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 
     @Mock
@@ -41,7 +42,7 @@ class CustomerServiceImplTest {
         // Given
         Customer customer1 = new Customer();
         customer1.setId(ID);
-        customer1.setFirstName(WAYNE);
+        customer1.setFirstName(FIRST_NAME);
         customer1.setLastName(LAST_NAME);
 
         Customer customer2 = new Customer();
@@ -63,7 +64,7 @@ class CustomerServiceImplTest {
         // Given
         Customer customer = new Customer();
         customer.setId(ID);
-        customer.setFirstName(WAYNE);
+        customer.setFirstName(FIRST_NAME);
         customer.setLastName(LAST_NAME);
 
         when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
@@ -75,5 +76,25 @@ class CustomerServiceImplTest {
         assertEquals(customer.getId(), customerDTO.getId());
         assertEquals(customer.getFirstName(), customerDTO.getFirstName());
         assertEquals(customer.getLastName(), customerDTO.getLastName());
+    }
+
+    @Test
+    void createNewCustomerTest() {
+        // Given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(ID);
+        customerDTO.setFirstName(FIRST_NAME);
+        customerDTO.setLastName(LAST_NAME);
+
+        Customer savedCustomer = customerMapper.customerDTOtoCustomer(customerDTO);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        // When
+        CustomerDTO savedCustomerDTO = customerService.createNewCustomer(customerDTO);
+
+        // Then
+        assertEquals(customerDTO.getFirstName(), savedCustomer.getFirstName());
+        assertEquals(customerDTO.getLastName(), savedCustomer.getLastName());
     }
 }
