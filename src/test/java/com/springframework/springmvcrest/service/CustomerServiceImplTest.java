@@ -38,7 +38,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void getAllCustomers() {
+    void getAllCustomersTest() {
         // Given
         Customer customer1 = new Customer();
         customer1.setId(ID);
@@ -60,7 +60,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void getCustomerById() {
+    void getCustomerByIdTest() {
         // Given
         Customer customer = new Customer();
         customer.setId(ID);
@@ -96,5 +96,28 @@ class CustomerServiceImplTest {
         // Then
         assertEquals(customerDTO.getFirstName(), savedCustomer.getFirstName());
         assertEquals(customerDTO.getLastName(), savedCustomer.getLastName());
+    }
+
+    @Test
+    void saveCustomerByDTOTest() {
+        // Given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(ID);
+        customerDTO.setFirstName(FIRST_NAME);
+        customerDTO.setLastName(LAST_NAME);
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setId(customerDTO.getId());
+        savedCustomer.setFirstName(customerDTO.getFirstName());
+        savedCustomer.setLastName(customerDTO.getLastName());
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        // When
+        CustomerDTO savedCustomerDTO = customerService.saveCustomerByDTO(ID, customerDTO);
+
+        // Then
+        assertEquals(customerDTO.getFirstName(), savedCustomerDTO.getFirstName());
+        assertEquals(customerDTO.getLastName(), savedCustomerDTO.getLastName());
     }
 }
