@@ -29,6 +29,7 @@ class CustomerControllerTest {
     public static final long ID = 1L;
     public static final String FIRST_NAME = "Wayne";
     public static final String LAST_NAME = "Hone";
+
     @Mock
     CustomerService customerService;
 
@@ -51,7 +52,7 @@ class CustomerControllerTest {
         when(customerService.getAllCustomers()).thenReturn(customerDTOList);
 
         // Then
-        mockMvc.perform(get("/api/customers/")
+        mockMvc.perform(get(CustomerController.CUSTOMER_BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(2)));
@@ -69,7 +70,7 @@ class CustomerControllerTest {
         when(customerService.getCustomerById(anyLong())).thenReturn(customer);
 
         // Then
-        mockMvc.perform(get("/api/customers/1")
+        mockMvc.perform(get(CustomerController.CUSTOMER_BASE_URL + "/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)));
@@ -92,7 +93,7 @@ class CustomerControllerTest {
         when(customerService.createNewCustomer(customer)).thenReturn(returnCustomerDTO);
 
         // Then
-        mockMvc.perform(post("/api/customers/")
+        mockMvc.perform(post(CustomerController.CUSTOMER_BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(customer)))
                 .andExpect(status().isCreated())
@@ -117,7 +118,7 @@ class CustomerControllerTest {
         when(customerService.saveCustomerByDTO(anyLong(), any(CustomerDTO.class))).thenReturn(returnCustomerDTO);
 
         // Then
-        mockMvc.perform(put("/api/customers/1")
+        mockMvc.perform(put(CustomerController.CUSTOMER_BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(customer)))
                 .andExpect(status().isOk())
@@ -142,7 +143,7 @@ class CustomerControllerTest {
         when(customerService.patchCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(returnCustomerDTO);
 
         // Then
-        mockMvc.perform(patch("/api/customers/1")
+        mockMvc.perform(patch(CustomerController.CUSTOMER_BASE_URL + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(customer)))
                 .andExpect(status().isOk())
@@ -152,7 +153,7 @@ class CustomerControllerTest {
 
     @Test
     void deleteCustomerTest() throws Exception {
-        mockMvc.perform(delete("/api/customers/1")
+        mockMvc.perform(delete(CustomerController.CUSTOMER_BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 

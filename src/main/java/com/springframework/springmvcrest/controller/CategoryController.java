@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 // @ResponseBody activated by default (no need to add the annotation for each request mapping) and indicates that the
 // return type should be written straight to the HTTP response body (and not placed in a Model, or interpreted as a view name)
 @Controller
-@RequestMapping("api/categories")
+@RequestMapping(CategoryController.CATEGORY_BASE_URL)
 public class CategoryController {
+    public static final String CATEGORY_BASE_URL = "/api/categories";
+
     private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {

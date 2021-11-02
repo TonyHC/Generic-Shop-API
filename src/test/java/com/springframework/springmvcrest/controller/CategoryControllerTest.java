@@ -58,7 +58,7 @@ class CategoryControllerTest {
         when(categoryService.getAllCategories()).thenReturn(categoryDTOList);
 
         // Then
-        mockMvc.perform(get("/api/categories")
+        mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 // Look at the JSON Root and go to the categories property
@@ -76,7 +76,7 @@ class CategoryControllerTest {
         when(categoryService.getCategoryByName(anyString())).thenReturn(categoryDTO);
 
         // Then
-        mockMvc.perform(get("/api/categories/Jin")
+        mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL + "/Jin")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(NAME)));

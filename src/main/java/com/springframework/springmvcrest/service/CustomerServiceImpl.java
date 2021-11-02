@@ -2,6 +2,7 @@ package com.springframework.springmvcrest.service;
 
 import com.springframework.springmvcrest.api.mapper.CustomerMapper;
 import com.springframework.springmvcrest.api.model.CustomerDTO;
+import com.springframework.springmvcrest.controller.CustomerController;
 import com.springframework.springmvcrest.domain.Customer;
 import com.springframework.springmvcrest.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,21 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerDTO> getAllCustomers() {
         return customerRepository.findAll()
                 .stream()
-                .map(customerMapper::customerToCustomerDTO)
-                .collect(Collectors.toList());
+                .map(customer -> {
+                    CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
+                    customerDTO.setCustomerUrl(getCustomerUrl(customer.getId()));
+                    return customerDTO;
+                }).collect(Collectors.toList());
     }
 
     @Override
     public CustomerDTO getCustomerById(Long id) {
-        return customerMapper.customerToCustomerDTO(customerRepository.findById(id).get());
+        return customerRepository.findById(id)
+                .map(customerMapper::customerToCustomerDTO)
+                .map(customerDTO -> {
+                    customerDTO.setCustomerUrl(getCustomerUrl(id));
+                    return customerDTO;
+                }).orElseThrow(RuntimeException::new);
     }
 
     @Override
@@ -56,7 +65,10 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.setLastName(customerDTO.getLastName());
             }
 
-            return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+            CustomerDTO returnCustomerDTO = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+            returnCustomerDTO.setCustomerUrl(getCustomerUrl(id));
+
+            return returnCustomerDTO;
         }).orElseThrow(RuntimeException::new);
     }
 
@@ -70,6 +82,12 @@ public class CustomerServiceImpl implements CustomerService {
 
         CustomerDTO returnCustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
 
+        returnCustomerDTO.setCustomerUrl(getCustomerUrl(savedCustomer.getId()));
+
         return returnCustomerDTO;
+    }
+
+    private String getCustomerUrl(Long id) {
+        return CustomerController.CUSTOMER_BASE_URL + "/" + id;
     }
 }
