@@ -89,7 +89,6 @@
                     <compilerArgs>
                         <compilerArg>
                             -Amapstruct.defaultComponentModel=spring
-                            --enable-preview
                         </compilerArg>
                     </compilerArgs>
                 </configuration>
