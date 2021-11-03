@@ -77,6 +77,13 @@ class CustomerControllerTest {
     }
 
     @Test
+    void getCustomerByIdInvalidIdTest() throws Exception {
+        mockMvc.perform(get(CustomerController.CUSTOMER_BASE_URL + "/se")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void createNewCustomerTest() throws Exception {
         // Given
         CustomerDTO customer = new CustomerDTO();
