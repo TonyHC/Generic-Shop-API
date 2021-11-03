@@ -2,6 +2,8 @@ package com.springframework.springmvcrest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springframework.springmvcrest.api.model.CustomerDTO;
+import com.springframework.springmvcrest.exception.ResourceNotFoundException;
+import com.springframework.springmvcrest.exception.RestResponseExceptionHandler;
 import com.springframework.springmvcrest.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +42,8 @@ class CustomerControllerTest {
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseExceptionHandler()).build();
     }
 
     @Test
@@ -74,6 +77,15 @@ class CustomerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)));
+    }
+
+    @Test
+    void getCustomerByIdNotFoundTest() throws Exception {
+        when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.CUSTOMER_BASE_URL + "/123")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test

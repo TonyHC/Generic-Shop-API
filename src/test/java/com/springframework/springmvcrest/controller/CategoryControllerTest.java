@@ -1,6 +1,8 @@
 package com.springframework.springmvcrest.controller;
 
 import com.springframework.springmvcrest.api.model.CategoryDTO;
+import com.springframework.springmvcrest.exception.ResourceNotFoundException;
+import com.springframework.springmvcrest.exception.RestResponseExceptionHandler;
 import com.springframework.springmvcrest.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CategoryControllerTest {
     public static final String NAME = "Thomas";
     public static final long ID = 1L;
+
     @Mock
     CategoryService categoryService;
 
@@ -38,7 +41,8 @@ class CategoryControllerTest {
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+                .setControllerAdvice(new RestResponseExceptionHandler()).build();
     }
 
     @Test
@@ -84,8 +88,10 @@ class CategoryControllerTest {
 
     @Test
     void getCategoryByNameNotFoundTest() throws Exception {
-        mockMvc.perform(get("/api/categories/Foo")
+        when(categoryService.getCategoryByName(anyString())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL + "/test")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isNotFound());
     }
 }
