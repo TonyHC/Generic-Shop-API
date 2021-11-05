@@ -3,6 +3,7 @@ package com.springframework.springmvcrest.controller;
 import com.springframework.springmvcrest.api.model.VendorDTO;
 import com.springframework.springmvcrest.api.model.VendorListDTO;
 import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
+import com.springframework.springmvcrest.api.model.VendorProductDTO;
 import com.springframework.springmvcrest.service.VendorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -62,6 +63,13 @@ public class VendorController {
     @ResponseStatus(HttpStatus.CREATED)
     public VendorDTO createNewVendor(@RequestBody VendorDTO vendorDTO) {
         return vendorService.createNewVendor(vendorDTO);
+    }
+
+    @PostMapping("/{id}/products")
+    @ResponseStatus(HttpStatus.CREATED)
+    public VendorProductDTO createNewVendorProduct(@PathVariable Long id,
+                                                   @RequestBody VendorProductDTO vendorProductDTO) {
+        return vendorService.createNewVendorProduct(id, vendorProductDTO);
     }
 
     @ApiOperation(value = "Update existing vendor")

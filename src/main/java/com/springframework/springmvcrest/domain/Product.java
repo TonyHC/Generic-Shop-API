@@ -20,8 +20,8 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "product_url")
-    private String productUrl;
+    @Column(name = "category")
+    private String category;
 
     @ManyToOne
     @JoinColumn(name = "vendor_id")

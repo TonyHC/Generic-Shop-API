@@ -1,5 +1,6 @@
 package com.springframework.springmvcrest.service;
 
+import com.springframework.springmvcrest.api.mapper.ProductMapper;
 import com.springframework.springmvcrest.api.mapper.VendorMapper;
 import com.springframework.springmvcrest.api.model.VendorDTO;
 import com.springframework.springmvcrest.domain.Vendor;
@@ -36,7 +37,7 @@ class VendorServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        vendorService = new VendorServiceImpl(vendorRepository, VendorMapper.INSTANCE);
+        vendorService = new VendorServiceImpl(vendorRepository, VendorMapper.INSTANCE, ProductMapper.INSTANCE);
     }
 
     @Test

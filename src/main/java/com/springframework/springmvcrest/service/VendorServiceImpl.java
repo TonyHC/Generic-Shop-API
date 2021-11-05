@@ -1,9 +1,12 @@
 package com.springframework.springmvcrest.service;
 
+import com.springframework.springmvcrest.api.mapper.ProductMapper;
 import com.springframework.springmvcrest.api.mapper.VendorMapper;
 import com.springframework.springmvcrest.api.model.VendorDTO;
 import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
+import com.springframework.springmvcrest.api.model.VendorProductDTO;
 import com.springframework.springmvcrest.controller.VendorController;
+import com.springframework.springmvcrest.domain.Product;
 import com.springframework.springmvcrest.domain.Vendor;
 import com.springframework.springmvcrest.exception.ResourceNotFoundException;
 import com.springframework.springmvcrest.repository.VendorRepository;
@@ -16,10 +19,12 @@ import java.util.stream.Collectors;
 public class VendorServiceImpl implements VendorService {
     private final VendorRepository vendorRepository;
     private final VendorMapper vendorMapper;
+    private final ProductMapper productMapper;
 
-    public VendorServiceImpl(VendorRepository vendorRepository, VendorMapper vendorMapper) {
+    public VendorServiceImpl(VendorRepository vendorRepository, VendorMapper vendorMapper, ProductMapper productMapper) {
         this.vendorRepository = vendorRepository;
         this.vendorMapper = vendorMapper;
+        this.productMapper = productMapper;
     }
 
     @Override
@@ -46,18 +51,26 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public VendorListProductsDTO getVendorProductsById(Long id) {
         return vendorRepository.findVendorProductsById(id)
-                .map(vendorMapper::vendorToVendorProductsDTO)
-                .map(vendorProductsDTO -> {
-                    vendorProductsDTO.getProducts().forEach(productDTO -> {
-                        productDTO.setVendorUrl(getVendorUrl(id));
-                    });
-                    return vendorProductsDTO;
-                }).orElseThrow(ResourceNotFoundException::new);
+                .map(vendorMapper::vendorToVendorListProductsDTO)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public VendorDTO createNewVendor(VendorDTO vendorDTO) {
         return saveAndReturnVendorDTO(vendorMapper.vendorDTOtoVendor(vendorDTO));
+    }
+
+    @Override
+    public VendorProductDTO createNewVendorProduct(Long id, VendorProductDTO vendorProductDTO) {
+        Vendor vendor = vendorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+
+        Product product = productMapper.vendorProductDTOtoProduct(vendorProductDTO);
+        vendor.addProduct(product);
+
+        vendorRepository.save(vendor);
+
+        return vendor.getProducts().stream().filter(product1 -> product1.getName().equalsIgnoreCase(product.getName()))
+                .map(productMapper::productToVendorProductDTO).findFirst().orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override

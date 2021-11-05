@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class VendorListProductsDTO {
-    private List<ProductDTO> products;
+    private List<VendorProductDTO> products;
 }

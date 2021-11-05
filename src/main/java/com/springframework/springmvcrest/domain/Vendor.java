@@ -3,6 +3,7 @@ package com.springframework.springmvcrest.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,9 +18,15 @@ public class Vendor {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "vendor_url")
-    private String vendorUrl;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "vendor")
     private List<Product> products;
+
+    public void addProduct(Product product) {
+        if (products == null) {
+            products = new ArrayList<>();
+        }
+
+        products.add(product);
+        product.setVendor(this);
+    }
 }
