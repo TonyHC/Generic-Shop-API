@@ -21,6 +21,7 @@ public class Vendor {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "vendor")
     private List<Product> products;
 
+    // Helper Method: To add product to the vendor and establish relationship between vendor and product
     public void addProduct(Product product) {
         if (products == null) {
             products = new ArrayList<>();

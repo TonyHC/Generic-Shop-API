@@ -46,7 +46,8 @@ public class VendorController {
 
     @ApiOperation(value = "Get vendor product(s) by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved vendor product(s)"),
+            @ApiResponse(code = 200, message = "Successfully retrieved vendor products",
+                response = VendorListProductsDTO.class, responseContainer = "List"),
             @ApiResponse(code = 400, message = "Invalid ID supplied"),
             @ApiResponse(code = 404, message = "Vendor product(s) not found") })
     @GetMapping("/{id}/products")
@@ -65,6 +66,10 @@ public class VendorController {
         return vendorService.createNewVendor(vendorDTO);
     }
 
+    @ApiOperation(value = "Create new vendor product")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully created new vendor product"),
+            @ApiResponse(code = 400, message = "Invalid request") })
     @PostMapping("/{id}/products")
     @ResponseStatus(HttpStatus.CREATED)
     public VendorProductDTO createNewVendorProduct(@PathVariable Long id,
