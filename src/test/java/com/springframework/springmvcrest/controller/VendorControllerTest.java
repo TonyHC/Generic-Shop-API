@@ -3,6 +3,8 @@ package com.springframework.springmvcrest.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springframework.springmvcrest.api.model.VendorDTO;
 import com.springframework.springmvcrest.api.model.VendorListDTO;
+import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
+import com.springframework.springmvcrest.api.model.VendorProductDTO;
 import com.springframework.springmvcrest.service.VendorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -49,12 +52,18 @@ class VendorControllerTest {
     MockMvc mockMvc;
 
     VendorDTO vendorDTO;
+    VendorProductDTO vendorProductDTO;
 
     @BeforeEach
     void setup() {
         vendorDTO = new VendorDTO();
         vendorDTO.setName("Vendor 1");
         vendorDTO.setVendorUrl(VendorController.VENDOR_BASE_URL + "/1");
+
+        vendorProductDTO = new VendorProductDTO();
+        vendorProductDTO.setName("Orange");
+        vendorProductDTO.setPrice(new BigDecimal("0.50"));
+        vendorProductDTO.setCategory("Fruits");
     }
 
     @Test
@@ -80,6 +89,19 @@ class VendorControllerTest {
     }
 
     @Test
+    void getVendorProductsById() throws Exception {
+        VendorListProductsDTO vendorListProductsDTO = new VendorListProductsDTO();
+        vendorListProductsDTO.setProducts(Arrays.asList(vendorProductDTO, vendorProductDTO));
+
+        given(vendorService.getVendorProductsById(anyLong())).willReturn(vendorListProductsDTO);
+
+        mockMvc.perform(get(VendorController.VENDOR_BASE_URL + "/1/products")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.products", hasSize(2)));
+    }
+
+    @Test
     void createNewVendor() throws Exception {
         given(vendorService.createNewVendor(vendorDTO)).willReturn(vendorDTO);
 
@@ -88,6 +110,17 @@ class VendorControllerTest {
                         .content(new ObjectMapper().writeValueAsString(vendorDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", equalTo(vendorDTO.getName())));
+    }
+
+    @Test
+    void createNewVendorProduct() throws Exception {
+        given(vendorService.createNewVendorProduct(anyLong(), any(VendorProductDTO.class))).willReturn(vendorProductDTO);
+
+        mockMvc.perform(post(VendorController.VENDOR_BASE_URL + "/1/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(vendorProductDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.category", equalTo(vendorProductDTO.getCategory())));
     }
 
     @Test
