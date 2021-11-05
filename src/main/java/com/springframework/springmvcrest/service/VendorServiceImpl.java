@@ -2,6 +2,7 @@ package com.springframework.springmvcrest.service;
 
 import com.springframework.springmvcrest.api.mapper.VendorMapper;
 import com.springframework.springmvcrest.api.model.VendorDTO;
+import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
 import com.springframework.springmvcrest.controller.VendorController;
 import com.springframework.springmvcrest.domain.Vendor;
 import com.springframework.springmvcrest.exception.ResourceNotFoundException;
@@ -39,6 +40,18 @@ public class VendorServiceImpl implements VendorService {
                 .map(vendorDTO -> {
                     vendorDTO.setVendorUrl(getVendorUrl(id));
                     return vendorDTO;
+                }).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public VendorListProductsDTO getVendorProductsById(Long id) {
+        return vendorRepository.findVendorProductsById(id)
+                .map(vendorMapper::vendorToVendorProductsDTO)
+                .map(vendorProductsDTO -> {
+                    vendorProductsDTO.getProducts().forEach(productDTO -> {
+                        productDTO.setVendorUrl(getVendorUrl(id));
+                    });
+                    return vendorProductsDTO;
                 }).orElseThrow(ResourceNotFoundException::new);
     }
 

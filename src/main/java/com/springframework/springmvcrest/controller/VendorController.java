@@ -1,8 +1,8 @@
 package com.springframework.springmvcrest.controller;
 
-import com.springframework.springmvcrest.api.model.CustomerListDTO;
 import com.springframework.springmvcrest.api.model.VendorDTO;
 import com.springframework.springmvcrest.api.model.VendorListDTO;
+import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
 import com.springframework.springmvcrest.service.VendorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,8 +39,19 @@ public class VendorController {
             @ApiResponse(code = 404, message = "Vendor not found") })
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public VendorDTO getVendor(@PathVariable Long id) {
+    public VendorDTO getVendorById(@PathVariable Long id) {
         return vendorService.getVendorById(id);
+    }
+
+    @ApiOperation(value = "Get vendor product(s) by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved vendor product(s)"),
+            @ApiResponse(code = 400, message = "Invalid ID supplied"),
+            @ApiResponse(code = 404, message = "Vendor product(s) not found") })
+    @GetMapping("/{id}/products")
+    @ResponseStatus(HttpStatus.OK)
+    public VendorListProductsDTO getVendorProductsById(@PathVariable Long id) {
+        return vendorService.getVendorProductsById(id);
     }
 
     @ApiOperation(value = "Create new vendor")
