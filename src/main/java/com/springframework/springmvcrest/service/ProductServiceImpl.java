@@ -4,6 +4,7 @@ import com.springframework.springmvcrest.api.mapper.ProductMapper;
 import com.springframework.springmvcrest.api.model.BasicProductDTO;
 import com.springframework.springmvcrest.api.model.ProductDTO;
 import com.springframework.springmvcrest.controller.ProductController;
+import com.springframework.springmvcrest.controller.VendorController;
 import com.springframework.springmvcrest.domain.Product;
 import com.springframework.springmvcrest.exception.ResourceNotFoundException;
 import com.springframework.springmvcrest.repository.ProductRepository;
@@ -35,7 +36,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProductById(Long id) {
         return productRepository.findById(id)
-                .map(productMapper::productToProductDTO)
+                .map(product -> {
+                    ProductDTO productDTO = productMapper.productToProductDTO(product);
+                    productDTO.setVendorUrl(getVendorUrl(product.getVendor().getId()));
+                    return productDTO;
+                })
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
@@ -65,6 +70,7 @@ public class ProductServiceImpl implements ProductService {
                     }
 
                     ProductDTO savedProductDTO = productMapper.productToProductDTO(productRepository.save(product));
+                    savedProductDTO.setVendorUrl(getVendorUrl(product.getVendor().getId()));
                     return savedProductDTO;
                 }).orElseThrow(ResourceNotFoundException::new);
     }
@@ -78,10 +84,15 @@ public class ProductServiceImpl implements ProductService {
         return ProductController.PRODUCT_BASE_URL + "/" + id;
     }
 
+    private String getVendorUrl(Long id) {
+        return VendorController.VENDOR_BASE_URL + "/" + id;
+    }
+
     private ProductDTO saveAndUpdateProduct(Product product) {
         Product savedProduct = productRepository.save(product);
 
         ProductDTO returnProductDTO = productMapper.productToProductDTO(savedProduct);
+        returnProductDTO.setVendorUrl(getVendorUrl(savedProduct.getVendor().getId()));
 
         return returnProductDTO;
     }
