@@ -52,7 +52,6 @@ public class ProductController {
         return productService.createNewProduct(productDTO);
     }
 
-
     @ApiOperation(value = "Update existing product")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully updated product"),
