@@ -63,7 +63,8 @@ class CategoryControllerTest {
 
         // Then
         mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 // Look at the JSON Root and go to the categories property
                 .andExpect(jsonPath("$.categories", hasSize(2)));
@@ -81,7 +82,8 @@ class CategoryControllerTest {
 
         // Then
         mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL + "/Jin")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(NAME)));
     }

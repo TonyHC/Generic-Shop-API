@@ -56,6 +56,7 @@ class CustomerControllerTest {
 
         // Then
         mockMvc.perform(get(CustomerController.CUSTOMER_BASE_URL)
+                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(2)));
@@ -74,6 +75,7 @@ class CustomerControllerTest {
 
         // Then
         mockMvc.perform(get(CustomerController.CUSTOMER_BASE_URL + "/1")
+                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)));
@@ -84,7 +86,7 @@ class CustomerControllerTest {
         when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(get(CustomerController.CUSTOMER_BASE_URL + "/123")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
@@ -113,6 +115,7 @@ class CustomerControllerTest {
 
         // Then
         mockMvc.perform(post(CustomerController.CUSTOMER_BASE_URL)
+                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(customer)))
                 .andExpect(status().isCreated())
@@ -138,8 +141,9 @@ class CustomerControllerTest {
 
         // Then
         mockMvc.perform(put(CustomerController.CUSTOMER_BASE_URL + "/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(customer)))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(customer)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)));
@@ -163,6 +167,7 @@ class CustomerControllerTest {
 
         // Then
         mockMvc.perform(patch(CustomerController.CUSTOMER_BASE_URL + "/1")
+                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(customer)))
                 .andExpect(status().isOk())
@@ -173,7 +178,7 @@ class CustomerControllerTest {
     @Test
     void deleteCustomerTest() throws Exception {
         mockMvc.perform(delete(CustomerController.CUSTOMER_BASE_URL + "/1")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(customerService, times(1)).deleteCustomerById(anyLong());
