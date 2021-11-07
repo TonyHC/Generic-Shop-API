@@ -1,0 +1,16 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="ProductList" type="ProductListDTO"/>
+    <xs:complexType name="Product">
+        <xs:sequence>
+            <xs:element type="xs:byte" name="id" minOccurs="0"/>
+            <xs:element type="xs:string" name="name" minOccurs="0"/>
+            <xs:element type="xs:string" name="product_url" minOccurs="0"/>
+            <xs:element type="Product" name="products" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ProductListDTO">
+        <xs:sequence>
+            <xs:element type="Product" name="products" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

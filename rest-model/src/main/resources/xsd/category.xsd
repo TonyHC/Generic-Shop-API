@@ -1,0 +1,14 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="CategoryList" type="CategoryListDTO"/>
+    <xs:complexType name="Category">
+        <xs:sequence>
+            <xs:element type="xs:byte" name="id" minOccurs="0"/>
+            <xs:element type="xs:string" name="name" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CategoryListDTO">
+        <xs:sequence>
+            <xs:element type="Category" name="categories" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
