@@ -8,5 +8,5 @@ import java.util.List;
 public interface CategoryService {
     void save(Category category);
     List<CategoryDTO> getAllCategories();
-    CategoryDTO getCategoryByName(String name);
+    CategoryDTO getCategoryById(Long id);
 }

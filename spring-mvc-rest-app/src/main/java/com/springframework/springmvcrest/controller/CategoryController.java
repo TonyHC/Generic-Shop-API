@@ -44,9 +44,9 @@ public class CategoryController {
 
     @ApiOperation(value = "Get category by name")
     @ApiResponse(code = 200, message = "Successfully retrieved category")
-    @GetMapping("/{name}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDTO getCategoryByName(@PathVariable String name) {
-        return categoryService.getCategoryByName(name);
+    public CategoryDTO getCategoryByName(@PathVariable Long id) {
+        return categoryService.getCategoryById(id);
     }
 }

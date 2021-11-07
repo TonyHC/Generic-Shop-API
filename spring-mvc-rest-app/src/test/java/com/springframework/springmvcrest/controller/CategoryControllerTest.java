@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -78,10 +79,10 @@ class CategoryControllerTest {
         categoryDTO.setName(NAME);
 
         // When
-        when(categoryService.getCategoryByName(anyString())).thenReturn(categoryDTO);
+        when(categoryService.getCategoryById(anyLong())).thenReturn(categoryDTO);
 
         // Then
-        mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL + "/Jin")
+        mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL + "/1")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -90,9 +91,9 @@ class CategoryControllerTest {
 
     @Test
     void getCategoryByNameNotFoundTest() throws Exception {
-        when(categoryService.getCategoryByName(anyString())).thenThrow(ResourceNotFoundException.class);
+        when(categoryService.getCategoryById(anyLong())).thenThrow(ResourceNotFoundException.class);
 
-        mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL + "/test")
+        mockMvc.perform(get(CategoryController.CATEGORY_BASE_URL + "/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

@@ -6,6 +6,7 @@ import com.springframework.springmvcrest.domain.Category;
 import com.springframework.springmvcrest.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.ReadOnlyFileSystemException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO getCategoryByName(String name) {
-        return categoryMapper.categoryToCategoryDTO(categoryRepository.findByName(name));
+    public CategoryDTO getCategoryById(Long id) {
+        //         return categoryMapper.categoryToCategoryDTO(categoryRepository.findById(id).get());
+        return categoryRepository.findById(id)
+                .stream()
+                .map(categoryMapper::categoryToCategoryDTO)
+                .findFirst().orElseThrow(ReadOnlyFileSystemException::new);
     }
 }
