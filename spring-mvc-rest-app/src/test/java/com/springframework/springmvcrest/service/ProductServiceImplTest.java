@@ -3,6 +3,7 @@ package com.springframework.springmvcrest.service;
 import com.springframework.springmvcrest.api.mapper.ProductMapper;
 import com.springframework.springmvcrest.api.model.BasicProductDTO;
 import com.springframework.springmvcrest.api.model.ProductDTO;
+import com.springframework.springmvcrest.domain.Category;
 import com.springframework.springmvcrest.domain.Product;
 import com.springframework.springmvcrest.domain.Vendor;
 import com.springframework.springmvcrest.exception.ResourceNotFoundException;
@@ -50,9 +51,10 @@ class ProductServiceImplTest {
         product = new Product();
         product.setId(ID);
         product.setName(NAME);
-        product.setCategory(CATEGORY);
+        product.setCategoryName(CATEGORY);
         product.setPrice(new BigDecimal(PRICE));
         product.setVendor(new Vendor());
+        product.setCategory(new Category());
 
         productDTO = new ProductDTO();
         productDTO.setId(ID);
@@ -84,7 +86,7 @@ class ProductServiceImplTest {
 
         // Then
         assertThat(productDTO.getName(), is(equalTo(NAME)));
-        assertThat(product.getCategory(), is(equalTo(CATEGORY)));
+        assertThat(product.getCategoryName(), is(equalTo(CATEGORY)));
     }
 
     @Test

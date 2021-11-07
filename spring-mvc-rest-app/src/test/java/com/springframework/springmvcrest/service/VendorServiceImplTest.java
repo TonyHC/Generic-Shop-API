@@ -140,7 +140,7 @@ class VendorServiceImplTest {
         VendorProductDTO vendorProductDTO = new VendorProductDTO();
         vendorProductDTO.setId(1L);
         vendorProductDTO.setName("Apple");
-        vendorProductDTO.setCategory("Fresh");
+        vendorProductDTO.setCategoryName("Fresh");
         vendorProductDTO.setPrice(new BigDecimal("0.99"));
 
         Vendor vendor = new Vendor();

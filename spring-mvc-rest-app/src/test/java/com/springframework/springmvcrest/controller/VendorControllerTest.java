@@ -63,7 +63,7 @@ class VendorControllerTest {
         vendorProductDTO = new VendorProductDTO();
         vendorProductDTO.setName("Orange");
         vendorProductDTO.setPrice(new BigDecimal("0.50"));
-        vendorProductDTO.setCategory("Fruits");
+        vendorProductDTO.setCategoryName("Fruits");
     }
 
     @Test
@@ -120,7 +120,7 @@ class VendorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(vendorProductDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.category", equalTo(vendorProductDTO.getCategory())));
+                .andExpect(jsonPath("$.categoryName", equalTo(vendorProductDTO.getCategoryName())));
     }
 
     @Test

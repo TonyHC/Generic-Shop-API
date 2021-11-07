@@ -20,4 +20,8 @@ public class ProductDTO {
     @JsonProperty(value = "vendor_url")
     @ApiModelProperty(value = "GET Mapping to find product")
     private String vendorUrl;
+
+    @JsonProperty(value = "category_url")
+    @ApiModelProperty(value = "GET Mapping to find category")
+    private String categoryUrl;
 }

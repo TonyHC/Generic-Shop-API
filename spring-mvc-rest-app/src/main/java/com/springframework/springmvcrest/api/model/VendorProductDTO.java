@@ -17,5 +17,5 @@ public class VendorProductDTO {
     private BigDecimal price;
 
     @ApiModelProperty(value = "Category of vendor product")
-    private String category;
+    private String categoryName;
 }

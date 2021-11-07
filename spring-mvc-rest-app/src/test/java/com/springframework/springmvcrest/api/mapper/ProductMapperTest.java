@@ -24,7 +24,7 @@ class ProductMapperTest {
         product.setId(ID);
         product.setName(NAME);
         product.setPrice(new BigDecimal(PRICE));
-        product.setCategory(CATEGORY);
+        product.setCategoryName(CATEGORY);
 
         // When
         BasicProductDTO basicProductDTO = productMapper.productToBasicProductDTO(product);
