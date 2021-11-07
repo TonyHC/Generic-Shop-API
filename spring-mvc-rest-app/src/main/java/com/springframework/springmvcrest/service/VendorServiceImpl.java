@@ -9,6 +9,7 @@ import com.springframework.springmvcrest.controller.VendorController;
 import com.springframework.springmvcrest.domain.Product;
 import com.springframework.springmvcrest.domain.Vendor;
 import com.springframework.springmvcrest.exception.ResourceNotFoundException;
+import com.springframework.springmvcrest.repository.CategoryRepository;
 import com.springframework.springmvcrest.repository.VendorRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,13 @@ import java.util.stream.Collectors;
 @Service
 public class VendorServiceImpl implements VendorService {
     private final VendorRepository vendorRepository;
+    private final CategoryRepository categoryRepository;
     private final VendorMapper vendorMapper;
     private final ProductMapper productMapper;
 
-    public VendorServiceImpl(VendorRepository vendorRepository, VendorMapper vendorMapper, ProductMapper productMapper) {
+    public VendorServiceImpl(VendorRepository vendorRepository, CategoryRepository categoryRepository, VendorMapper vendorMapper, ProductMapper productMapper) {
         this.vendorRepository = vendorRepository;
+        this.categoryRepository = categoryRepository;
         this.vendorMapper = vendorMapper;
         this.productMapper = productMapper;
     }
@@ -65,7 +68,9 @@ public class VendorServiceImpl implements VendorService {
         Vendor vendor = vendorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
         Product product = productMapper.vendorProductDTOtoProduct(vendorProductDTO);
+        product.setCategory(categoryRepository.findByName(vendorProductDTO.getCategoryName()));
         product.setCategoryName(vendorProductDTO.getCategoryName());
+
         vendor.addProduct(product);
 
         vendorRepository.save(vendor);

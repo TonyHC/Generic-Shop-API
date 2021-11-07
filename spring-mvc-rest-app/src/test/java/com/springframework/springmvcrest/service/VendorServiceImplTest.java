@@ -8,6 +8,7 @@ import com.springframework.springmvcrest.api.model.VendorProductDTO;
 import com.springframework.springmvcrest.domain.Product;
 import com.springframework.springmvcrest.domain.Vendor;
 import com.springframework.springmvcrest.exception.ResourceNotFoundException;
+import com.springframework.springmvcrest.repository.CategoryRepository;
 import com.springframework.springmvcrest.repository.VendorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,11 +39,14 @@ class VendorServiceImplTest {
     @Mock
     VendorRepository vendorRepository;
 
+    @Mock
+    CategoryRepository categoryRepository;
+
     VendorService vendorService;
 
     @BeforeEach
     void setUp() {
-        vendorService = new VendorServiceImpl(vendorRepository, VendorMapper.INSTANCE, ProductMapper.INSTANCE);
+        vendorService = new VendorServiceImpl(vendorRepository, categoryRepository, VendorMapper.INSTANCE, ProductMapper.INSTANCE);
     }
 
     @Test
