@@ -1,5 +1,6 @@
 package com.springframework.springmvcrest.api.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -17,5 +18,6 @@ public class VendorProductDTO {
     private BigDecimal price;
 
     @ApiModelProperty(value = "Category of vendor product")
+    @JsonProperty(value = "category")
     private String categoryName;
 }

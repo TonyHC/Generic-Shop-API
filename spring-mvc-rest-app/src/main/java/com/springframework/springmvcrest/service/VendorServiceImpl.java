@@ -65,6 +65,7 @@ public class VendorServiceImpl implements VendorService {
         Vendor vendor = vendorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
         Product product = productMapper.vendorProductDTOtoProduct(vendorProductDTO);
+        product.setCategoryName(vendorProductDTO.getCategoryName());
         vendor.addProduct(product);
 
         vendorRepository.save(vendor);

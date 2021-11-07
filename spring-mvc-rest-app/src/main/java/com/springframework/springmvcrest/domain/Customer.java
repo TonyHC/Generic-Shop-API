@@ -18,7 +18,4 @@ public class Customer {
 
     @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "customer_url")
-    private String customerUrl;
 }

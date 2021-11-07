@@ -120,7 +120,7 @@ class VendorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(vendorProductDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.categoryName", equalTo(vendorProductDTO.getCategoryName())));
+                .andExpect(jsonPath("$.category", equalTo(vendorProductDTO.getCategoryName())));
     }
 
     @Test
