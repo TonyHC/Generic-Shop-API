@@ -5,6 +5,7 @@ import com.springframework.springmvcrest.api.mapper.VendorMapper;
 import com.springframework.springmvcrest.api.model.VendorDTO;
 import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
 import com.springframework.springmvcrest.api.model.VendorProductDTO;
+import com.springframework.springmvcrest.domain.Category;
 import com.springframework.springmvcrest.domain.Product;
 import com.springframework.springmvcrest.domain.Vendor;
 import com.springframework.springmvcrest.exception.ResourceNotFoundException;
@@ -27,6 +28,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -155,12 +157,14 @@ class VendorServiceImplTest {
 
         given(vendorRepository.findById(anyLong())).willReturn(Optional.of(vendor));
         given(vendorRepository.save(any(Vendor.class))).willReturn(vendor);
+        given(categoryRepository.findByName(anyString())).willReturn(new Category());
 
         // When
         VendorProductDTO savedVendorProductDTO = vendorService.createNewVendorProduct(1L, vendorProductDTO);
 
         // Then
         then(vendorRepository).should(times(1)).save(any(Vendor.class));
+        then(categoryRepository).should(times(1)).findByName(anyString());
 
         assertThat(savedVendorProductDTO.getName(), containsString(vendorProductDTO.getName()));
         assertThat(savedVendorProductDTO.getPrice(), is(equalTo(vendorProductDTO.getPrice())));

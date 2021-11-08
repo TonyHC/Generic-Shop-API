@@ -3,11 +3,15 @@ package com.springframework.springmvcrest.service;
 import com.springframework.springmvcrest.api.mapper.ProductMapper;
 import com.springframework.springmvcrest.api.model.BasicProductDTO;
 import com.springframework.springmvcrest.api.model.ProductDTO;
+import com.springframework.springmvcrest.controller.CategoryController;
+import com.springframework.springmvcrest.controller.VendorController;
 import com.springframework.springmvcrest.domain.Category;
 import com.springframework.springmvcrest.domain.Product;
 import com.springframework.springmvcrest.domain.Vendor;
 import com.springframework.springmvcrest.exception.ResourceNotFoundException;
+import com.springframework.springmvcrest.repository.CategoryRepository;
 import com.springframework.springmvcrest.repository.ProductRepository;
+import com.springframework.springmvcrest.repository.VendorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +29,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -39,27 +44,43 @@ class ProductServiceImplTest {
     @Mock
     ProductRepository productRepository;
 
+    @Mock
+    CategoryRepository categoryRepository;
+
+    @Mock
+    VendorRepository vendorRepository;
+
     ProductService productService;
 
+    Category category;
     Product product;
     ProductDTO productDTO;
+    Vendor vendor;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductServiceImpl(productRepository, ProductMapper.INSTANCE);
+        productService = new ProductServiceImpl(productRepository, categoryRepository, vendorRepository, ProductMapper.INSTANCE);
+
+        category = new Category();
+        category.setId(ID);
+
+        vendor = new Vendor();
+        vendor.setId(ID);
 
         product = new Product();
         product.setId(ID);
         product.setName(NAME);
         product.setCategoryName(CATEGORY);
         product.setPrice(new BigDecimal(PRICE));
-        product.setVendor(new Vendor());
-        product.setCategory(new Category());
+        product.setVendor(vendor);
+        product.setCategory(category);
 
         productDTO = new ProductDTO();
         productDTO.setId(ID);
         productDTO.setName(NAME);
         productDTO.setPrice(new BigDecimal(PRICE));
+        productDTO.setCategoryUrl(CategoryController.CATEGORY_BASE_URL + "/1");
+        productDTO.setVendorUrl(VendorController.VENDOR_BASE_URL + "/1");
     }
 
     @Test
@@ -105,12 +126,19 @@ class ProductServiceImplTest {
     void createNewProduct() {
         // Given
         given(productRepository.save(any(Product.class))).willReturn(product);
+        given(categoryRepository.findByName(anyString())).willReturn(category);
+        given(vendorRepository.findById(anyLong())).willReturn(Optional.of(vendor));
 
         // When
         ProductDTO saveProductDTO = productService.createNewProduct(productDTO);
 
         // Then
+        then(categoryRepository).should(times(1)).findByName(anyString());
+        then(vendorRepository).should(times(1)).findById(anyLong());
+
         assertThat(saveProductDTO.getName(), is(equalTo(productDTO.getName())));
+        assertThat(saveProductDTO.getCategoryUrl(), is(equalTo(productDTO.getCategoryUrl())));
+        assertThat(saveProductDTO.getVendorUrl(), is(equalTo(productDTO.getVendorUrl())));
     }
 
     @Test
