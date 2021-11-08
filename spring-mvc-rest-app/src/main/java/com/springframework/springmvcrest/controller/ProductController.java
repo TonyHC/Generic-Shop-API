@@ -28,7 +28,7 @@ public class ProductController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ProductListDTO getAllProducts() {
-        return new ProductListDTO(productService.getAllProducts());
+        return productService.getAllProducts();
     }
 
     @ApiOperation(value = "Get product by id")

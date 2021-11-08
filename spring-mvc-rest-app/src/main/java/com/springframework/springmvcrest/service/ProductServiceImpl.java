@@ -3,6 +3,7 @@ package com.springframework.springmvcrest.service;
 import com.springframework.springmvcrest.api.mapper.ProductMapper;
 import com.springframework.springmvcrest.api.model.BasicProductDTO;
 import com.springframework.springmvcrest.api.model.ProductDTO;
+import com.springframework.springmvcrest.api.model.ProductListDTO;
 import com.springframework.springmvcrest.controller.CategoryController;
 import com.springframework.springmvcrest.controller.ProductController;
 import com.springframework.springmvcrest.controller.VendorController;
@@ -31,13 +32,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<BasicProductDTO> getAllProducts() {
-        return productRepository.findAll().stream()
+    public ProductListDTO getAllProducts() {
+        List<BasicProductDTO> basicProductDTOList = productRepository.findAll().stream()
                 .map(product -> {
                     BasicProductDTO basicProductDTO = productMapper.productToBasicProductDTO(product);
                     basicProductDTO.setProductUrl(getProductUrl(product.getId()));
                     return basicProductDTO;
                 }).collect(Collectors.toList());
+
+       return new ProductListDTO(basicProductDTOList);
     }
 
     @Override

@@ -1,12 +1,10 @@
 package com.springframework.springmvcrest.service;
 
-import com.springframework.springmvcrest.api.model.BasicProductDTO;
 import com.springframework.springmvcrest.api.model.ProductDTO;
-
-import java.util.List;
+import com.springframework.springmvcrest.api.model.ProductListDTO;
 
 public interface ProductService {
-    List<BasicProductDTO> getAllProducts();
+    ProductListDTO getAllProducts();
     ProductDTO getProductById(Long id);
     ProductDTO createNewProduct(ProductDTO productDTO);
     ProductDTO updateProduct(Long id, ProductDTO productDTO);

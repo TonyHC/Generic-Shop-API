@@ -50,7 +50,7 @@ class ProductControllerTest {
     void getAllProducts() throws Exception {
         ProductListDTO productListDTO = new ProductListDTO(Arrays.asList(new BasicProductDTO(), new BasicProductDTO()));
 
-        given(productService.getAllProducts()).willReturn(productListDTO.getProducts());
+        given(productService.getAllProducts()).willReturn(productListDTO);
 
         mockMvc.perform(get(ProductController.PRODUCT_BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON))

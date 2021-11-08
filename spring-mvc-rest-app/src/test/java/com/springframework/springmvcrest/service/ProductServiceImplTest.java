@@ -3,6 +3,7 @@ package com.springframework.springmvcrest.service;
 import com.springframework.springmvcrest.api.mapper.ProductMapper;
 import com.springframework.springmvcrest.api.model.BasicProductDTO;
 import com.springframework.springmvcrest.api.model.ProductDTO;
+import com.springframework.springmvcrest.api.model.ProductListDTO;
 import com.springframework.springmvcrest.controller.CategoryController;
 import com.springframework.springmvcrest.controller.VendorController;
 import com.springframework.springmvcrest.domain.Category;
@@ -91,10 +92,10 @@ class ProductServiceImplTest {
         given(productRepository.findAll()).willReturn(products);
 
         // When
-        List<BasicProductDTO> basicProductDTOS = productService.getAllProducts();
+        ProductListDTO productListDTO = productService.getAllProducts();
 
         // Then
-        assertThat(basicProductDTOS.size(), is(equalTo(2)));
+        assertThat(productListDTO.getProducts().size(), is(equalTo(2)));
     }
 
     @Test
