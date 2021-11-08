@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Api(tags = "Customer", description = "Customer API")
 @RestController
 @RequestMapping(CustomerController.CUSTOMER_BASE_URL)
@@ -48,7 +50,7 @@ public class CustomerController {
             @ApiResponse(code = 400, message = "Invalid request") })
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO) {
+    public CustomerDTO createNewCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         return customerService.createNewCustomer(customerDTO);
     }
 
@@ -59,7 +61,7 @@ public class CustomerController {
             @ApiResponse(code = 404, message = "Customer not found") })
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+    public CustomerDTO updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO) {
         return customerService.saveCustomerByDTO(id, customerDTO);
     }
 
@@ -70,7 +72,7 @@ public class CustomerController {
             @ApiResponse(code = 404, message = "Customer not found") })
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerDTO patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+    public CustomerDTO patchCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO) {
         return customerService.patchCustomer(id, customerDTO);
     }
 

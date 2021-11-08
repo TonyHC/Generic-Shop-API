@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Api(tags = "Product", description = "Product API")
 @RestController
 @RequestMapping(ProductController.PRODUCT_BASE_URL)
@@ -48,7 +50,7 @@ public class ProductController {
             @ApiResponse(code = 400, message = "Invalid request")})
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDTO createNewProduct(@RequestBody ProductDTO productDTO) {
+    public ProductDTO createNewProduct(@Valid  @RequestBody ProductDTO productDTO) {
         return productService.createNewProduct(productDTO);
     }
 
@@ -59,7 +61,7 @@ public class ProductController {
             @ApiResponse(code = 404, message = "Product not found") })
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductDTO updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+    public ProductDTO updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) {
         return productService.updateProduct(id, productDTO);
     }
 
@@ -70,7 +72,7 @@ public class ProductController {
             @ApiResponse(code = 404, message = "Product not found") })
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductDTO patchProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+    public ProductDTO patchProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) {
         return productService.patchProduct(id, productDTO);
     }
 

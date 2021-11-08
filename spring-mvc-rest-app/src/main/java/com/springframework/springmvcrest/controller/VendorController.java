@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Api(tags = "Vendor", description = "Vendor API")
 @RestController
 @RequestMapping(VendorController.VENDOR_BASE_URL)
@@ -62,7 +64,7 @@ public class VendorController {
             @ApiResponse(code = 400, message = "Invalid request") })
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public VendorDTO createNewVendor(@RequestBody VendorDTO vendorDTO) {
+    public VendorDTO createNewVendor(@Valid  @RequestBody VendorDTO vendorDTO) {
         return vendorService.createNewVendor(vendorDTO);
     }
 
@@ -73,7 +75,7 @@ public class VendorController {
     @PostMapping("/{id}/products")
     @ResponseStatus(HttpStatus.CREATED)
     public VendorProductDTO createNewVendorProduct(@PathVariable Long id,
-                                                   @RequestBody VendorProductDTO vendorProductDTO) {
+                                                   @Valid @RequestBody VendorProductDTO vendorProductDTO) {
         return vendorService.createNewVendorProduct(id, vendorProductDTO);
     }
 
@@ -84,7 +86,7 @@ public class VendorController {
             @ApiResponse(code = 404, message = "Vendor not found") })
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public VendorDTO updateVendor(@PathVariable Long id, @RequestBody VendorDTO vendorDTO) {
+    public VendorDTO updateVendor(@PathVariable Long id, @Valid @RequestBody VendorDTO vendorDTO) {
         return vendorService.saveVendorByDTO(id, vendorDTO);
     }
 
@@ -95,7 +97,7 @@ public class VendorController {
             @ApiResponse(code = 404, message = "Vendor not found") })
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public VendorDTO patchVendor(@PathVariable Long id, @RequestBody VendorDTO vendorDTO) {
+    public VendorDTO patchVendor(@PathVariable Long id, @Valid @RequestBody VendorDTO vendorDTO) {
         return vendorService.patchVendor(id, vendorDTO);
     }
 

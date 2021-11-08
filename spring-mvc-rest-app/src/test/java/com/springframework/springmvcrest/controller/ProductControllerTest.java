@@ -15,8 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -44,6 +46,9 @@ class ProductControllerTest {
         productDTO = new ProductDTO();
         productDTO.setId(1L);
         productDTO.setName("Grapes");
+        productDTO.setPrice(new BigDecimal("2.99"));
+        productDTO.setVendorUrl(VendorController.VENDOR_BASE_URL + "/1");
+        productDTO.setCategoryUrl(CategoryController.CATEGORY_BASE_URL + "/1");
     }
 
     @Test
@@ -65,7 +70,9 @@ class ProductControllerTest {
         mockMvc.perform(get(ProductController.PRODUCT_BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", containsString(productDTO.getName())));
+                .andExpect(jsonPath("$.name", containsString(productDTO.getName())))
+                .andExpect(jsonPath("$.vendor_url", containsString(productDTO.getVendorUrl())))
+                .andExpect(jsonPath("$.category_url", containsString(productDTO.getCategoryUrl())));
     }
 
     @Test
@@ -76,7 +83,9 @@ class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(productDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", equalTo(productDTO.getName())));
+                .andExpect(jsonPath("$.name", equalTo(productDTO.getName())))
+                .andExpect(jsonPath("$.vendor_url", containsString(productDTO.getVendorUrl())))
+                .andExpect(jsonPath("$.category_url", containsString(productDTO.getCategoryUrl())));
     }
 
     @Test
@@ -88,7 +97,9 @@ class ProductControllerTest {
                 .content(new ObjectMapper().writeValueAsString(productDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))
-                .andExpect(jsonPath("$.name", equalTo(productDTO.getName())));
+                .andExpect(jsonPath("$.name", equalTo(productDTO.getName())))
+                .andExpect(jsonPath("$.vendor_url", containsString(productDTO.getVendorUrl())))
+                .andExpect(jsonPath("$.category_url", containsString(productDTO.getCategoryUrl())));
     }
 
     @Test
@@ -99,7 +110,9 @@ class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(productDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo(productDTO.getName())));
+                .andExpect(jsonPath("$.name", equalTo(productDTO.getName())))
+                .andExpect(jsonPath("$.vendor_url", containsString(productDTO.getVendorUrl())))
+                .andExpect(jsonPath("$.category_url", containsString(productDTO.getCategoryUrl())));
     }
 
     @Test
