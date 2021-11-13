@@ -3,10 +3,7 @@ package com.springframework.springmvcrest.controller;
 import com.springframework.springmvcrest.api.model.CustomerDTO;
 import com.springframework.springmvcrest.api.model.CustomerListDTO;
 import com.springframework.springmvcrest.service.CustomerService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +21,8 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @ApiOperation(value = "List of customers", notes = "Return a small amount of Customers")
-    @ApiResponse(code = 200, message = "Successfully retrieved customers",
+    @ApiOperation(value = "List of customers", notes = "Return a small subset of customers")
+    @ApiResponse(code = 200, message = "Found customers",
             response = CustomerListDTO.class, responseContainer = "List")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -35,19 +32,19 @@ public class CustomerController {
 
     @ApiOperation(value = "Get customer by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved customer"),
+            @ApiResponse(code = 200, message = "Found customer"),
             @ApiResponse(code = 400, message = "Invalid ID supplied"),
             @ApiResponse(code = 404, message = "Customer not found") })
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerDTO getCustomerById(@PathVariable Long id) {
+    public CustomerDTO getCustomerById(@ApiParam(value = "Customer id", required = true) @PathVariable Long id) {
         return customerService.getCustomerById(id);
     }
 
     @ApiOperation(value = "Create a new customer")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully created new customer"),
-            @ApiResponse(code = 400, message = "Invalid request") })
+            @ApiResponse(code = 201, message = "Created new customer"),
+            @ApiResponse(code = 400, message = "Invalid request")})
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDTO createNewCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
@@ -56,34 +53,36 @@ public class CustomerController {
 
     @ApiOperation(value = "Update existing customer")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully updated customer"),
+            @ApiResponse(code = 200, message = "Updated customer"),
             @ApiResponse(code = 400, message = "Invalid ID supplied"),
-            @ApiResponse(code = 404, message = "Customer not found") })
+            @ApiResponse(code = 409, message = "Customer not found")})
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerDTO updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO) {
+    public CustomerDTO updateCustomer(@ApiParam(value = "Customer id", required = true) @PathVariable Long id,
+                                      @Valid @RequestBody CustomerDTO customerDTO) {
         return customerService.saveCustomerByDTO(id, customerDTO);
     }
 
     @ApiOperation(value = "Patch existing customer")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved customer"),
+            @ApiResponse(code = 200, message = "Patched customer"),
             @ApiResponse(code = 400, message = "Invalid ID supplied"),
-            @ApiResponse(code = 404, message = "Customer not found") })
+            @ApiResponse(code = 409, message = "Customer not found")})
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerDTO patchCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO) {
+    public CustomerDTO patchCustomer(@ApiParam(value = "Customer id", required = true) @PathVariable Long id,
+                                     @Valid @RequestBody CustomerDTO customerDTO) {
         return customerService.patchCustomer(id, customerDTO);
     }
 
     @ApiOperation(value = "Delete existing customer")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully deleted customer"),
+            @ApiResponse(code = 200, message = "Deleted customer"),
             @ApiResponse(code = 400, message = "Invalid ID supplied"),
             @ApiResponse(code = 404, message = "Customer not found") })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCustomer(@PathVariable Long id) {
+    public void deleteCustomer(@ApiParam(value = "Customer id", required = true) @PathVariable Long id) {
         customerService.deleteCustomerById(id);
     }
 }

@@ -4,10 +4,7 @@ import com.springframework.springmvcrest.api.model.CategoryDTO;
 import com.springframework.springmvcrest.api.model.CategoryListDTO;
 import com.springframework.springmvcrest.api.model.CustomerListDTO;
 import com.springframework.springmvcrest.service.CategoryService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +31,7 @@ public class CategoryController {
     * You can control anything that goes into it: status code, headers, and body
     * CategoryListDTO object is written to the HTTP Response Entity
     */
-    @ApiResponse(code = 200, message = "Successfully retrieved categories",
+    @ApiResponse(code = 200, message = "Found categories",
             response = CategoryListDTO.class, responseContainer = "List")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -43,10 +40,14 @@ public class CategoryController {
     }
 
     @ApiOperation(value = "Get category by name")
-    @ApiResponse(code = 200, message = "Successfully retrieved category")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Found category"),
+            @ApiResponse(code = 400, message = "Invalid In supplied"),
+            @ApiResponse(code = 404, message = "Category mot found")
+    })
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDTO getCategoryByName(@PathVariable Long id) {
+    public CategoryDTO getCategoryByName(@ApiParam(value = "Category id", required = true) @PathVariable Long id) {
         return categoryService.getCategoryById(id);
     }
 }
