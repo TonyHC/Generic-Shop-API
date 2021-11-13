@@ -111,7 +111,7 @@ class CustomerControllerTest {
         returnCustomerDTO.setLastName(customer.getLastName());
 
         // When
-        when(customerService.createNewCustomer(customer)).thenReturn(returnCustomerDTO);
+        when(customerService.createNewCustomer(any(CustomerDTO.class))).thenReturn(returnCustomerDTO);
 
         // Then
         mockMvc.perform(post(CustomerController.CUSTOMER_BASE_URL)
