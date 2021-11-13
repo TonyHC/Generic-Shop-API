@@ -5,14 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class BasicProductDTO {
-    @ApiModelProperty(value = "Id of basic product")
-    private Long id;
-
-    @ApiModelProperty(value = "Name of basic product")
-    private String name;
-
-    @ApiModelProperty(value = "URL of basic product")
+public class BasicProductDTO extends BaseProduct {
+    @ApiModelProperty(value = "URL of basic product", position = 2)
     @JsonProperty("product_url")
     private String productUrl;
 }
