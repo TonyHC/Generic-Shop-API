@@ -2,6 +2,7 @@ package com.springframework.springmvcrest.controller;
 
 import com.springframework.springmvcrest.api.model.CustomerDTO;
 import com.springframework.springmvcrest.api.model.CustomerListDTO;
+import com.springframework.springmvcrest.config.SwaggerConfig;
 import com.springframework.springmvcrest.service.CustomerService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Api(tags = "Customer", description = "Customer API")
+@Api(tags = {SwaggerConfig.CUSTOMER_TAG})
 @RestController
 @RequestMapping(CustomerController.CUSTOMER_BASE_URL)
 public class CustomerController {

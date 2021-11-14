@@ -15,7 +15,7 @@ class ProductMapperTest {
     public static final String PRICE = "1.22";
     public static final String CATEGORY = "Fruits";
 
-    ProductMapper productMapper = ProductMapper.INSTANCE;
+    final ProductMapper productMapper = ProductMapper.INSTANCE;
 
     @Test
     void productToBasicProductDTO() {

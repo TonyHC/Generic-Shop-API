@@ -10,7 +10,7 @@ class VendorMapperTest {
     public static final long ID = 1L;
     public static final String NAME = "Marcus";
 
-    VendorMapper vendorMapper = VendorMapper.INSTANCE;
+    final VendorMapper vendorMapper = VendorMapper.INSTANCE;
 
     @Test
     void vendorToVendorDTO() {

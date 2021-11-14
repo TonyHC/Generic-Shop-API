@@ -2,13 +2,13 @@ package com.springframework.springmvcrest.controller;
 
 import com.springframework.springmvcrest.api.model.CategoryDTO;
 import com.springframework.springmvcrest.api.model.CategoryListDTO;
-import com.springframework.springmvcrest.api.model.CustomerListDTO;
+import com.springframework.springmvcrest.config.SwaggerConfig;
 import com.springframework.springmvcrest.service.CategoryService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "Category", description = "Category API")
+@Api(tags = {SwaggerConfig.CATEGORY_TAG})
 /*
 * @RestController: convenience annotation that does nothing more than adding the @Controller and @ResponseBody annotations
 * @ResponseBody activated by default (no need to add the annotation for each request mapping) and indicates that the

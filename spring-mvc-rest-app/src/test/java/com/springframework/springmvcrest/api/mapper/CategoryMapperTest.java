@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryMapperTest {
-    CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
+    final CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
 
     @Test
     void categoryToCategoryDTOTest() {

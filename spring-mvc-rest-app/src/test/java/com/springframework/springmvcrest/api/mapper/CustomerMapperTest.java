@@ -11,7 +11,7 @@ class CustomerMapperTest {
     public static final String FIRST_NAME = "Thomas";
     public static final String LAST_NAME = "Payne";
 
-    CustomerMapper customerMapper = CustomerMapper.INSTANCE;
+    final CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 
     @Test
     void customerToCustomerDTO() {

@@ -1,7 +1,6 @@
 package com.springframework.springmvcrest.service;
 
 import com.springframework.springmvcrest.api.mapper.ProductMapper;
-import com.springframework.springmvcrest.api.model.BasicProductDTO;
 import com.springframework.springmvcrest.api.model.ProductDTO;
 import com.springframework.springmvcrest.api.model.ProductListDTO;
 import com.springframework.springmvcrest.controller.CategoryController;

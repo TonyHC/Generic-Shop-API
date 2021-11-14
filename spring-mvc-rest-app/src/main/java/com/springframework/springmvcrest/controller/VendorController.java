@@ -4,6 +4,7 @@ import com.springframework.springmvcrest.api.model.VendorDTO;
 import com.springframework.springmvcrest.api.model.VendorListDTO;
 import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
 import com.springframework.springmvcrest.api.model.VendorProductDTO;
+import com.springframework.springmvcrest.config.SwaggerConfig;
 import com.springframework.springmvcrest.service.VendorService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Api(tags = "Vendor", description = "Vendor API")
+@Api(tags = {SwaggerConfig.VENDOR_TAG})
 @RestController
 @RequestMapping(VendorController.VENDOR_BASE_URL)
 public class VendorController {

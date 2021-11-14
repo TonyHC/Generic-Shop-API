@@ -2,6 +2,7 @@ package com.springframework.springmvcrest.controller;
 
 import com.springframework.springmvcrest.api.model.ProductDTO;
 import com.springframework.springmvcrest.api.model.ProductListDTO;
+import com.springframework.springmvcrest.config.SwaggerConfig;
 import com.springframework.springmvcrest.service.ProductService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Api(tags = "Product", description = "Product API")
+@Api(tags = {SwaggerConfig.PRODUCT_TAG})
 @RestController
 @RequestMapping(ProductController.PRODUCT_BASE_URL)
 public class ProductController {

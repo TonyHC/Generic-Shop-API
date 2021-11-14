@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,7 +23,7 @@ class CustomerServiceImplTest {
     public static final String FIRST_NAME = "Wayne";
     public static final String LAST_NAME = "Hone";
 
-    CustomerMapper customerMapper = CustomerMapper.INSTANCE;
+    final CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 
     @Mock
     CustomerRepository customerRepository;
