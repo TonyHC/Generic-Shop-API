@@ -1,6 +1,6 @@
 package com.springframework.springmvcrest.api.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class CustomerListDTO {
-    @ApiModelProperty(value = "List of customers")
+    @Schema(description = "List of customers")
     List<CustomerDTO> customers;
 }

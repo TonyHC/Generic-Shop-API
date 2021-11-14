@@ -1,7 +1,7 @@
 package com.springframework.springmvcrest.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -10,23 +10,22 @@ import javax.validation.constraints.Size;
 
 @Data
 public class CustomerDTO {
-    @ApiModelProperty(value = "Id of customer", position = 0)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Schema(description = "Id of customer", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
-    @ApiModelProperty(value = "First Name", required = true, example = "Thomas", position = 1)
+    @Schema(description = "First name", required = true, example = "Thomas")
     @NotBlank
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z]+", message = "First name")
     @Size(min = 1, max = 30)
     private String firstName;
 
-    @ApiModelProperty(value = "Last Name", required = true, example = "Long", position = 2)
+    @Schema(description = "Last name", required = true, example = "Long")
     @NotBlank
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z]+", message = "Last name")
     @Size(min = 1, max = 30)
     private String lastName;
 
-    @ApiModelProperty(value = "GET mapping to find customer", example = "/api/customers/2", position = 3)
+    @Schema(description = "Endpoint to find customer", example = "/api/customers/2")
     @JsonProperty("customer_url")
     private String customerUrl;
 }

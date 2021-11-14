@@ -1,12 +1,12 @@
 package com.springframework.springmvcrest.api.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class VendorListProductsDTO {
-    @ApiModelProperty(value = "List of vendor products")
+    @Schema(description = "List of vendor products")
     private List<VendorProductDTO> products;
 }

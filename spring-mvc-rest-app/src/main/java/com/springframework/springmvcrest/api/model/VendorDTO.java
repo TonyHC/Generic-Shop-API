@@ -1,7 +1,7 @@
 package com.springframework.springmvcrest.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -9,16 +9,16 @@ import javax.validation.constraints.Size;
 
 @Data
 public class VendorDTO {
-    @ApiModelProperty(value = "Id of vendor", position = 0)
+    @Schema(description = "Id of vendor", example = "3", accessMode = Schema.AccessMode.READ_ONLY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @ApiModelProperty(value = "Name of the vendor", required = true, example = "Fresh Fruits", position = 1)
+    @Schema(description = "Name of vendor", required = true, example = "Fresh Fruits")
     @NotBlank
     @Size(min = 1, max = 100)
     private String name;
 
-    @ApiModelProperty(value = "GET mapping to find vendor", example = "/api/vendors/3", position = 2)
+    @Schema(description = "Endpoint to find vendor", example = "/api/vendors/3")
     @JsonProperty("vendor_url")
     private String vendorUrl;
 }

@@ -1,7 +1,7 @@
 package com.springframework.springmvcrest.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 
 @Data
 public class VendorProductDTO extends BaseProduct {
-    @ApiModelProperty(value = "Price of vendor product", required = true, example = "6.50", position = 2)
+    @Schema(description = "Price of vendor product", required = true, example = "3.99")
     @NotNull
     @Positive
     private BigDecimal price;
 
-    @ApiModelProperty(value = "Category of vendor product", required = true, example = "Fresh", position = 3)
+    @Schema(description = "Category of vendor product", required = true, example = "Fresh")
     @JsonProperty(value = "category")
     @NotBlank
     @Size(min = 1, max = 30)

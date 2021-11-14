@@ -1,18 +1,21 @@
 package com.springframework.springmvcrest.controller;
 
-import com.springframework.springmvcrest.api.model.VendorDTO;
-import com.springframework.springmvcrest.api.model.VendorListDTO;
-import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
-import com.springframework.springmvcrest.api.model.VendorProductDTO;
-import com.springframework.springmvcrest.config.SwaggerConfig;
+import com.springframework.springmvcrest.api.model.*;
 import com.springframework.springmvcrest.service.VendorService;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Api(tags = {SwaggerConfig.VENDOR_TAG})
+@Tag(name = "Vendor", description = "Vendor API")
 @RestController
 @RequestMapping(VendorController.VENDOR_BASE_URL)
 public class VendorController {
@@ -24,91 +27,103 @@ public class VendorController {
         this.vendorService = vendorService;
     }
 
-    @ApiOperation(value = "List all vendors")
-    @ApiResponse(code = 200, message = "Found vendors",
-            response = VendorListDTO.class, responseContainer = "List")
+    @Operation(summary = "List all vendors")
+    @ApiResponse(responseCode = "200", description = "Found vendors",
+            content = @Content(mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = VendorListDTO.class))))
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public VendorListDTO getAllVendors() {
         return new VendorListDTO(vendorService.getAllVendors());
     }
 
-    @ApiOperation(value = "Get vendor by id")
+    @Operation(summary = "Get vendor by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Found vendor"),
-            @ApiResponse(code = 400, message = "Invalid ID supplied"),
-            @ApiResponse(code = 404, message = "Vendor not found") })
+            @ApiResponse(responseCode = "200", description = "Found vendor",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VendorDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Vendor not found", content = @Content)})
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public VendorDTO getVendorById(@ApiParam(value = "Vendor id", required = true) @PathVariable Long id) {
+    public VendorDTO getVendorById(@Parameter(description = "Vendor id", required = true) @PathVariable Long id) {
         return vendorService.getVendorById(id);
     }
 
-    @ApiOperation(value = "Get vendor product(s) by id")
+    @Operation(summary = "Get vendor product(s) by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Found vendor products",
-                response = VendorListProductsDTO.class, responseContainer = "List"),
-            @ApiResponse(code = 400, message = "Invalid ID supplied"),
-            @ApiResponse(code = 404, message = "Vendor products not found") })
+            @ApiResponse(responseCode = "200", description = "Found vendor products",
+                    content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = VendorListProductsDTO.class)))),
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Vendor products not found", content = @Content)})
     @GetMapping("/{id}/products")
     @ResponseStatus(HttpStatus.OK)
-    public VendorListProductsDTO getVendorProductsById(@ApiParam(value = "Vendor id", required = true) @PathVariable Long id) {
+    public VendorListProductsDTO getVendorProductsById(@Parameter(description = "Vendor id", required = true) @PathVariable Long id) {
         return vendorService.getVendorProductsById(id);
     }
 
-    @ApiOperation(value = "Create new vendor")
+    @Operation(summary = "Create new vendor")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Created new vendor"),
-            @ApiResponse(code = 400, message = "Invalid request") })
+            @ApiResponse(responseCode = "201", description = "Created new vendor",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VendorDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content)})
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public VendorDTO createNewVendor(@Valid @RequestBody VendorDTO vendorDTO) {
         return vendorService.createNewVendor(vendorDTO);
     }
 
-    @ApiOperation(value = "Create new vendor product")
+    @Operation(summary = "Create new vendor product")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Created new vendor product"),
-            @ApiResponse(code = 400, message = "Invalid request") })
+            @ApiResponse(responseCode = "201", description = "Created new vendor product",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VendorProductDTO.class))),
+            @ApiResponse(responseCode = "409", description = "Invalid request", content = @Content)})
     @PostMapping("/{id}/products")
     @ResponseStatus(HttpStatus.CREATED)
-    public VendorProductDTO createNewVendorProduct(@ApiParam(value = "Vendor id", required = true) @PathVariable Long id,
+    public VendorProductDTO createNewVendorProduct(@Parameter(description = "Vendor id", required = true) @PathVariable Long id,
                                                    @Valid @RequestBody VendorProductDTO vendorProductDTO) {
         return vendorService.createNewVendorProduct(id, vendorProductDTO);
     }
 
-    @ApiOperation(value = "Update existing vendor")
+    @Operation(summary = "Update existing vendor")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Updated vendor"),
-            @ApiResponse(code = 400, message = "Invalid ID supplied"),
-            @ApiResponse(code = 409, message = "Vendor not found") })
+            @ApiResponse(responseCode = "200", description = "Updated vendor",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VendorDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Vendor not found", content = @Content)})
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public VendorDTO updateVendor(@ApiParam(value = "Vendor id", required = true) @PathVariable Long id,
+    public VendorDTO updateVendor(@Parameter(description = "Vendor id", required = true) @PathVariable Long id,
                                   @Valid @RequestBody VendorDTO vendorDTO) {
         return vendorService.saveVendorByDTO(id, vendorDTO);
     }
 
-    @ApiOperation(value = "Patch existing vendor")
+    @Operation(summary = "Patch existing vendor")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Patched vendor"),
-            @ApiResponse(code = 400, message = "Invalid ID supplied"),
-            @ApiResponse(code = 409, message = "Vendor not found") })
+            @ApiResponse(responseCode = "200", description = "Patched vendor",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VendorDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Vendor not found", content = @Content)})
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public VendorDTO patchVendor(@ApiParam(value = "Vendor id", required = true) @PathVariable Long id,
+    public VendorDTO patchVendor(@Parameter(description = "Vendor id", required = true) @PathVariable Long id,
                                  @Valid @RequestBody VendorDTO vendorDTO) {
         return vendorService.patchVendor(id, vendorDTO);
     }
 
-    @ApiOperation(value = "Delete existing vendor")
+    @Operation(summary = "Delete existing vendor")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Deleted vendor"),
-            @ApiResponse(code = 400, message = "Invalid ID supplied"),
-            @ApiResponse(code = 404, message = "Vendor not found") })
+            @ApiResponse(responseCode = "200", description = "Deleted vendor", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Vendor not found", content = @Content)})
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteVendor(@ApiParam(value = "Vendor id", required = true) @PathVariable Long id) {
+    public void deleteVendor(@Parameter(description = "Vendor id", required = true) @PathVariable Long id) {
         vendorService.deleteVendorById(id);
     }
 }
