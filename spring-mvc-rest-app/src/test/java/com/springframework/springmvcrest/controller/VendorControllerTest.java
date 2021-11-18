@@ -6,14 +6,13 @@ import com.springframework.springmvcrest.api.model.VendorListDTO;
 import com.springframework.springmvcrest.api.model.VendorListProductsDTO;
 import com.springframework.springmvcrest.api.model.VendorProductDTO;
 import com.springframework.springmvcrest.service.VendorService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -21,16 +20,16 @@ import java.util.Arrays;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
 /*
 * Often @WebMvcTest will be limited to a single controller and used in combination with @MockBean to provide mock
 * implementations for required collaborators.
@@ -51,6 +50,9 @@ class VendorControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     VendorDTO vendorDTO;
     VendorProductDTO vendorProductDTO;
 
@@ -64,6 +66,11 @@ class VendorControllerTest {
         vendorProductDTO.setName("Orange");
         vendorProductDTO.setPrice(new BigDecimal("0.50"));
         vendorProductDTO.setCategoryName("Fruits");
+    }
+
+    @AfterEach
+    void tearDown() {
+        reset(vendorService);
     }
 
     @Test
@@ -85,7 +92,8 @@ class VendorControllerTest {
         mockMvc.perform(get(VendorController.VENDOR_BASE_URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo(vendorDTO.getName())));
+                .andExpect(jsonPath("$.name", equalTo(vendorDTO.getName())))
+                .andExpect(jsonPath("$.vendor_url", equalTo(vendorDTO.getVendorUrl())));
     }
 
     @Test
@@ -107,7 +115,7 @@ class VendorControllerTest {
 
         mockMvc.perform(post(VendorController.VENDOR_BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(vendorDTO)))
+                        .content(objectMapper.writeValueAsString(vendorDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", equalTo(vendorDTO.getName())));
     }
@@ -118,7 +126,7 @@ class VendorControllerTest {
 
         mockMvc.perform(post(VendorController.VENDOR_BASE_URL + "/1/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(vendorProductDTO)))
+                        .content(objectMapper.writeValueAsString(vendorProductDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.category", equalTo(vendorProductDTO.getCategoryName())));
     }
@@ -128,8 +136,8 @@ class VendorControllerTest {
         given(vendorService.saveVendorByDTO(anyLong(), any(VendorDTO.class))).willReturn(vendorDTO);
 
         mockMvc.perform(put((VendorController.VENDOR_BASE_URL + "/1"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(vendorDTO)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(vendorDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(vendorDTO.getName())));
     }
@@ -139,8 +147,8 @@ class VendorControllerTest {
         given(vendorService.patchVendor(anyLong(), any(VendorDTO.class))).willReturn(vendorDTO);
 
         mockMvc.perform(patch(VendorController.VENDOR_BASE_URL + "/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(vendorDTO)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(vendorDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(vendorDTO.getName())));
     }

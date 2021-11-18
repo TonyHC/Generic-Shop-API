@@ -38,25 +38,22 @@ class CategoryControllerTest {
     CategoryController categoryController;
 
     MockMvc mockMvc;
+    CategoryDTO categoryDTO;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
                 .setControllerAdvice(new RestResponseExceptionHandler()).build();
+
+        categoryDTO = new CategoryDTO();
+        categoryDTO.setId(ID);
+        categoryDTO.setName(NAME);
     }
 
     @Test
     void getAllCategoriesTest() throws Exception {
         // Given
-        CategoryDTO categoryDTO1 = new CategoryDTO();
-        categoryDTO1.setId(ID);
-        categoryDTO1.setName(NAME);
-
-        CategoryDTO categoryDTO2 = new CategoryDTO();
-        categoryDTO2.setId(2L);
-        categoryDTO2.setName("Rob");
-
-        List<CategoryDTO> categoryDTOList = Arrays.asList(categoryDTO1, categoryDTO2);
+        List<CategoryDTO> categoryDTOList = Arrays.asList(categoryDTO, categoryDTO);
 
         // When
         when(categoryService.getAllCategories()).thenReturn(categoryDTOList);
@@ -72,11 +69,6 @@ class CategoryControllerTest {
 
     @Test
     void getCategoryByNameTest() throws Exception {
-        // Given
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setId(ID);
-        categoryDTO.setName(NAME);
-
         // When
         when(categoryService.getCategoryById(anyLong())).thenReturn(categoryDTO);
 
